@@ -1,0 +1,70 @@
+<ion-header>
+  <ion-toolbar>
+  <ion-buttons slot="start">
+		<ion-back-button defaultHref="/home"></ion-back-button>
+	</ion-buttons>
+    <ion-title>Help</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+<ng-container *ngIf="authService.getUserType() != 'SA' && authService.getUserType() != 'A' && authService.getIsUserLoggedIn()">
+<ion-item>
+  <ion-label position="floating">Subject</ion-label>
+  <ion-input type="text" [(ngModel)]="subject"></ion-input>
+</ion-item>
+<ion-item>
+  <ion-label position="floating">Comments</ion-label>
+  <ion-textarea type="number" [(ngModel)]="comments"></ion-textarea>
+</ion-item>
+<ion-row>
+  <ion-col style="text-align:center;">
+	 <ion-button expand="block" (click)="postComments()">Post your comments</ion-button>
+  </ion-col>
+</ion-row>
+<ion-list>
+	<ion-item button (click)="presentQueriesModal()">
+	  <ion-icon slot="start" name="help-circle-outline" style=""></ion-icon>
+	  <ion-label>
+		<h3>Your queries</h3>
+	  </ion-label>
+	</ion-item>
+	<ion-item button (click)="presentContactModal()">
+	  <ion-icon slot="start" name="trail-sign-outline" style=""></ion-icon>
+	  <ion-label>
+		<h3>Contact us</h3>
+	  </ion-label>
+	</ion-item>
+	<ion-item button (click)="presentTermsModal()">
+	  <ion-icon slot="start" name="book-outline" style=""></ion-icon>
+	  <ion-label>
+		<h3>Terms and Conditions</h3>
+	  </ion-label>
+	</ion-item>
+</ion-list>
+</ng-container>
+<ng-container>
+<ion-list *ngIf="!authService.getIsUserLoggedIn()">
+	<ion-item button (click)="presentContactModal()">
+	  <ion-icon slot="start" name="trail-sign-outline" style=""></ion-icon>
+	  <ion-label>
+		<h3>Contact us</h3>
+	  </ion-label>
+	</ion-item>
+	<ion-item button (click)="presentTermsModal()">
+	  <ion-icon slot="start" name="book-outline" style=""></ion-icon>
+	  <ion-label>
+		<h3>Terms and Conditions</h3>
+	  </ion-label>
+	</ion-item>
+</ion-list>
+</ng-container>
+<ng-container *ngIf="authService.getUserType() == 'SA' || authService.getUserType() == 'A'">
+<ion-item button (click)="presentQueriesModal()">
+	  <ion-icon slot="start" name="help-circle-outline" style=""></ion-icon>
+	  <ion-label>
+		<h3>Customer queries</h3>
+	  </ion-label>
+	</ion-item>
+</ng-container>
+</ion-content>

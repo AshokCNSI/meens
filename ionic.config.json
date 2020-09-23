@@ -1,5 +1,7 @@
 {
   "name": "meens",
-  "integrations": {},
+  "integrations": {
+    "cordova": {}
+  },
   "type": "angular"
 }

@@ -1,0 +1,35 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+		<ion-back-button defaultHref="/home"></ion-back-button>
+	</ion-buttons>
+    <ion-title>My Products</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+	<ion-searchbar #search animated showCancelButton="always" debounce="500" (ionCancel)="onCancel($event)" cancelButtonText="Custom Cancel"
+    (ionInput)="filterList($event)"  [value]="searchVal" autofocus="true"></ion-searchbar>
+	<ng-container *ngIf="productList.length == 0">
+		<p class="no-items">No products available</p>
+	</ng-container>
+	<ng-container *ngIf="productList.length > 0">
+	
+	<ion-item *ngFor="let p of productList; let i = index;" (click)="routeProductDetail(p.index)">
+	  <ion-thumbnail slot="start">
+		<img alt="M" src="{{p.imagepath}}" onerror="this.onerror=null;this.src='https://www.nicepng.com/png/detail/128-1282756_svg-free-download-marlin-clipart-deep-sea-fishing.png';">
+	  </ion-thumbnail>
+		<ion-label>
+			<ion-card-title>{{p.title}}</ion-card-title>
+			<ion-card-subtitle>{{p.details}}</ion-card-subtitle>
+			<ion-card-subtitle>Available for Sale: {{p.available == "Y" ? "Yes" : "No"}}</ion-card-subtitle>
+			<ion-card-subtitle>Availbale for discount: {{p.discount == "Y" ? "Yes" : "No"}}</ion-card-subtitle>
+			<ion-card-subtitle>Discount Price: &#x20b9;{{p.discountprice}}</ion-card-subtitle>
+		</ion-label>
+		<ion-thumbnail slot="end">
+			<ion-card-subtitle>&#x20b9;{{p.price}}</ion-card-subtitle>
+	    </ion-thumbnail>
+	</ion-item>
+	
+	</ng-container>
+</ion-content>

@@ -1,0 +1,33 @@
+<ion-content>
+<img alt="M" *ngIf="pagemode == 'D'" src="{{imagepath}}" onerror="this.onerror=null;this.src='https://www.nicepng.com/png/detail/128-1282756_svg-free-download-marlin-clipart-deep-sea-fishing.png';">
+<ion-card>
+	<ion-card-header>
+	  <ion-card-title>{{title}}</ion-card-title>
+	  </ion-card-header>
+	<ion-card-content>
+	  {{details}}
+	</ion-card-content>
+  </ion-card>
+<ng-container *ngIf="pagemode == 'B' || pagemode == 'O'">
+<ion-card-header>
+	<ion-card-title class="heading">What are you going to do with?</ion-card-title>
+</ion-card-header>
+  <ion-item *ngFor="let p of fishpiecetype">
+	<ion-label>{{p.name}}</ion-label>
+	<ion-checkbox color="danger" disabled="{{ordervisibility}}" slot="start" [(ngModel)]="p.checked" (ionChange)="checkboxClick($event)"></ion-checkbox>
+  </ion-item>
+  <ion-item>
+	  <ion-label position="floating">What would you like us to do?</ion-label>
+	  <ion-textarea [(ngModel)]="desc" disabled="{{ordervisibility}}"></ion-textarea>
+	</ion-item>
+</ng-container>
+</ion-content>
+<ion-footer class="ion-no-border" *ngIf="pagemode == 'B'">
+  <ion-toolbar>
+    <ion-row>
+	  <ion-col style="text-align:center;">
+		 <ion-button expand="block" color="danger" (click)="updateItem()">Update Order</ion-button>
+	  </ion-col>
+	</ion-row>
+  </ion-toolbar>
+</ion-footer>

@@ -1,0 +1,33 @@
+<ion-content fullscreen> 
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button (click)="loadMap()">
+      <ion-icon name="locate-outline"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+  <ion-fab vertical="top" horizontal="end" slot="fixed">
+    <ion-fab-button (click)="closeModal()">
+      <ion-icon name="chevron-back-circle-outline"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+  <div class="map-wrapper" style="height: 100%;">      
+    <div id="map_center">
+      <ion-icon name="pin" size="large" color="danger"></ion-icon>      
+    </div>
+    <div #map id="map"  style="height: 100%;"></div>
+  </div>   
+</ion-content>
+<ion-footer>
+	<ion-item>
+	  <ion-icon slot="start" name="navigate-circle-outline"></ion-icon>
+	  <ion-card-subtitle>Select Delivery Location</ion-card-subtitle>
+	  <ion-button slot="end" (click)="openAddressBar()">
+		change
+	  </ion-button>
+	</ion-item>
+	<ion-item>
+	<ion-card-subtitle>{{addressA ? addressA.toString() : "No Address Found"}}</ion-card-subtitle>
+	</ion-item>
+	<ion-toolbar>
+		<ion-button expand="block" (click)="confirmMyLocation()">Confirm my location</ion-button>
+	</ion-toolbar>
+</ion-footer>

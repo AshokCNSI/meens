@@ -1,0 +1,42 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Queries</ion-title>
+	<ion-buttons slot="end">
+	<ion-button (click)="dismissModal()">Close</ion-button>
+  </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+<ion-card *ngFor="let p of queriesList">
+  <ion-card-header>
+    <ion-card-subtitle>Subject : {{p.subject}}</ion-card-subtitle>
+    <ion-card-title>Question : {{p.comments}}</ion-card-title>
+  </ion-card-header>
+
+  <ion-card-content>
+  <ng-container>
+    Answer: {{p.answer ? p.answer : 'No answers received from executive yet.'}}
+  </ng-container>
+  <ion-card *ngIf="authService.getUserType() == 'SA' || authService.getUserType() == 'A'">
+	  <ion-card-header>
+		<ion-card-subtitle>{{p.customername}}</ion-card-subtitle>
+		<ion-card-title>{{p.mobile}}</ion-card-title>
+	  </ion-card-header>
+
+	  <ion-card-content>
+		{{p.location}}
+	  </ion-card-content>
+	</ion-card>
+	<ion-item *ngIf="!p.answer && (authService.getUserType() == 'SA' || authService.getUserType() == 'A')">
+		<ion-label position="floating">Answer</ion-label>
+		<ion-textarea type="text" [(ngModel)]="answer"></ion-textarea>
+		<ion-button (click)="postMyAnswer(p.index)">Post</ion-button>
+	</ion-item>
+  </ion-card-content>
+
+</ion-card>
+<ng-container *ngIf="queriesList.length == 0">
+	<p class="no-items">No Queries added.</p>
+</ng-container>
+</ion-content>

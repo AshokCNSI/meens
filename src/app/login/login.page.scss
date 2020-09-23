@@ -1,0 +1,24 @@
+.vertical-center{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.center {
+   display: block;
+   margin: auto;
+  }
+  
+ion-button {
+  --background: #eb445a;
+}
+
+.font-size-25px {
+	font-size: 25px !important;
+}
+
+.validator-error {
+	color: red; 
+	padding-top: 0.2rem; 
+	padding-left: 20px;
+}

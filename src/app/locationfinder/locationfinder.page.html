@@ -1,0 +1,27 @@
+<ion-content>
+	<ion-row>
+      <ion-col>
+         <div class="vertical-center">
+            <div class="center">
+               <img src="assets/logo/logo.png"/>
+            </div>
+         </div>
+      </ion-col>
+   </ion-row>
+   <ion-card>
+	  <ion-card-header>
+		<ion-card-title>Location status</ion-card-title>
+	  </ion-card-header>
+
+	  <ion-card-content>
+		We found, you haven't enabled the location service. Please turn on the location and clikc try again.
+	</ion-card-content>
+	</ion-card>
+	<ion-row>
+	  <ion-col style="text-align:center;">
+		 <ion-button (click)="updateMyLocation()">
+		  <ion-icon slot="icon-only" name="reload-circle"></ion-icon>
+		</ion-button>
+	  </ion-col>
+   </ion-row>
+</ion-content>

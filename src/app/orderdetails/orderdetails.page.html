@@ -1,0 +1,196 @@
+<ion-header translucent>
+  <ion-toolbar>
+	<ion-buttons style="font-size: 25px;margin: 10px;" slot="start" [routerLink]="['/orders']">
+		<ion-icon name="arrow-back-outline"></ion-icon>
+	</ion-buttons>
+    <ion-title>Order Review</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+<ng-container *ngIf="authService.getUserType() == 'C'">
+	<mat-vertical-stepper [linear]="true" *ngIf="currentindex != undefined" #stepper style="margin-left: 25%;" [selectedIndex]="currentindex">
+	  <mat-step label="Ordered" [editable]="false" [completed]="false"></mat-step>
+	  <mat-step label="{{currentstatusname}}" [editable]="false" [completed]="false"></mat-step>
+	</mat-vertical-stepper>
+</ng-container>
+<ng-container *ngIf="authService.getUserType() != 'S' || authService.getUserType() == 'D'">
+<ion-card-header>
+	<ion-card-title class="heading">Seller details</ion-card-title>
+</ion-card-header>
+<ion-item>
+	<ion-card-header>
+		  <ion-card-title class="title">{{shopname}}</ion-card-title>
+		  <ion-card-subtitle>{{distance}} km</ion-card-subtitle>
+		  <ion-card-subtitle (click)="goToClientLocation()" color="danger" *ngIf="authService.getUserType() == 'D' && oldStatus == 'DS'">Navigate to Shop</ion-card-subtitle>
+	</ion-card-header>
+</ion-item>
+</ng-container>
+<ng-container *ngIf="authService.getUserType() != 'S' || authService.getUserType() == 'D'">
+<ion-item>
+	<ion-card-title class="heading">Delivering to</ion-card-title>
+</ion-item>
+<ion-card>
+  <ion-card-header>
+	<ion-card-subtitle class="thrirdlevellabel">{{dname}}</ion-card-subtitle>
+	<ion-card-title class="thrirdlevellabel">{{dmobile}}</ion-card-title>
+	<ion-card-content class="subtitleThin">
+		{{dhouseno}}
+		{{dstreetname}}
+		{{dlandmark}}
+	</ion-card-content>
+	<ion-card-subtitle (click)="goToClientLocation()" color="danger" *ngIf="authService.getUserType() == 'D' && oldStatus == 'IPD'">Navigate to Customer</ion-card-subtitle>
+  </ion-card-header>
+</ion-card>
+</ng-container>
+<ion-card-header>
+	<ion-card-title class="heading">Bill details</ion-card-title>
+</ion-card-header>
+<ng-container *ngIf="cartList.length > 0">
+<ng-container *ngFor="let p of cartList; let i = index;">
+<ion-item (click)="openItemDetails(i)">
+	<ion-card-header>
+		  <ion-card-title class="title">{{p.title}}</ion-card-title>
+		  <ion-card-title class="titlelink" style="color:{{cartList[i].options || cartList[i].desc ? 'red' : '#3880ff'}}">{{cartList[i].options || cartList[i].desc ? 'customized' : 'customize'}} ></ion-card-title>
+	</ion-card-header>
+</ion-item>
+<ion-item-divider>
+<ion-grid>
+  <ion-row>
+		  <ion-col>
+			 <ion-card-subtitle>{{p.quantity}} kg x {{p.price}}</ion-card-subtitle>
+		  </ion-col>
+		  <ion-col style="text-align:right;">
+			 <ion-card-subtitle>&#x20b9; {{p.quantity * p.price}}</ion-card-subtitle>
+		  </ion-col>
+	</ion-row>
+	<ion-row>
+		  <ion-col>
+			 <ion-card-subtitle>Discount</ion-card-subtitle>
+		  </ion-col>
+		  <ion-col style="text-align:right;">
+			 <ion-card-subtitle>&#x20b9; {{p.quantity * p.discount}}</ion-card-subtitle>
+		  </ion-col>
+	</ion-row>
+	<ion-row *ngIf="p.masala == 'Y' && p.masalaquantity">
+		  <ion-col>
+			 <ion-card-subtitle>Masala</ion-card-subtitle>
+		  </ion-col>
+		  <ion-col style="text-align:right;">
+			 <ion-card-subtitle>&#x20b9; {{p.masalaquantity * masalacharge}}</ion-card-subtitle>
+		  </ion-col>
+	</ion-row>
+	<ion-row>
+		  <ion-col>
+			 <ion-card-subtitle>Total</ion-card-subtitle>
+		  </ion-col>
+		  <ion-col style="text-align:right;">
+			 <ion-card-subtitle>&#x20b9; {{p.quantity * p.price - p.quantity * p.discount}}</ion-card-subtitle>
+		  </ion-col>
+	</ion-row>
+</ion-grid>
+</ion-item-divider>
+</ng-container>
+<ng-container>
+<ion-card-header>
+	<ion-card-title class="heading">Other Charges</ion-card-title>
+</ion-card-header>
+<ion-item-divider>
+<ion-grid>
+  <ion-row *ngIf="masalaquantity > 0">
+		  <ion-col>
+			 <ion-card-subtitle>Masala</ion-card-subtitle>
+		  </ion-col>
+		  <ion-col style="text-align:right;">
+			 <ion-card-subtitle>&#x20b9; {{masalaquantity * masalacharge}}</ion-card-subtitle>
+		  </ion-col>
+	</ion-row>
+	<ion-row>
+		  <ion-col>
+			 <ion-card-subtitle>Delivery</ion-card-subtitle>
+		  </ion-col>
+		  <ion-col style="text-align:right;">
+			 <ion-card-subtitle>&#x20b9; {{deliverycharge}}</ion-card-subtitle>
+		  </ion-col>
+	</ion-row>
+</ion-grid>
+</ion-item-divider>
+</ng-container>
+
+<ng-container *ngIf="productVisibility != 'AC' && productVisibility != 'R'">
+	  <ng-container *ngFor="let p of statusList;">
+	  <ion-list-header *ngIf="productVisibility != 'AC' && productVisibility != 'R' && productVisibility == p.code">
+		  <ion-label>
+			{{p.name}}
+		  </ion-label>
+		  <ion-progress-bar value="{{p.buffer}}" buffer="0.5"></ion-progress-bar>
+		  </ion-list-header>
+	  </ng-container>
+</ng-container>
+<ng-container *ngIf="(oldStatus != 'DE') && (authService.getUserType() == 'D' && assignedto == authService.getUserID()) || (productVisibility != 'AC' && productVisibility != 'R') && ((authService.getUserType() == 'S' || authService.getUserType() == 'D') && !assignedto)">
+	<ion-item>
+	  <ion-label>Change Order Status</ion-label>
+	  <ion-select [(ngModel)]="productVisibility" interface="action-sheet">
+		<ng-container *ngFor="let p of statusList;">
+			<ion-select-option value="{{p.code}}" *ngIf="((p.code != 'ORD' && p.code != 'DS' && p.code != 'IPD' && p.code != 'DE') && authService.getUserType() == 'S') || ((p.code != 'ORD' && p.code != 'INP' && p.code != 'CL') && authService.getUserType() == 'D')">{{p.name}}</ion-select-option>
+		</ng-container>
+	  </ion-select>
+	</ion-item>
+</ng-container>
+</ng-container>
+
+<ng-container *ngIf="cartList.length == 0">
+	<ion-row *ngFor="let i of Arr(skeletoncount).fill(1)">
+		<ion-col>
+			<ion-card>
+				<ion-skeleton-text animated></ion-skeleton-text>
+				<ion-card-header>
+				  <ion-card-subtitle><ion-skeleton-text animated style="width: 50%"></ion-skeleton-text></ion-card-subtitle>
+				  <ion-card-title><ion-skeleton-text animated style="width: 50%"></ion-skeleton-text></ion-card-title>
+				  
+				</ion-card-header>
+				<italic style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;">
+				  <ion-skeleton-text animated style="width: 50%"></ion-skeleton-text>
+				</italic>
+				
+				<ion-card-header>
+				  <ion-card-subtitle><ion-skeleton-text animated style="width: 50%"></ion-skeleton-text></ion-card-subtitle>
+				  <ion-card-subtitle><ion-skeleton-text animated style="width: 50%"></ion-skeleton-text></ion-card-subtitle>
+				</ion-card-header>
+			</ion-card>
+		</ion-col>
+	</ion-row>
+</ng-container>
+
+<ng-container *ngIf="oldStatus == 'DE'">
+	<p class="no-items" >Delievered Successfully.</p>
+</ng-container>
+</ion-content>
+<ion-footer class="ion-no-border" *ngIf="cartList.length > 0">
+  <ion-toolbar>
+	<ion-row>
+	  <ion-col *ngIf="(authService.getUserType() == 'C')">
+		 <ion-card-subtitle>Your Bill Amount</ion-card-subtitle>
+	  </ion-col>
+	  <ion-col *ngIf="(authService.getUserType() == 'S' || authService.getUserType() == 'D') && oldStatus != 'DE'">
+		 <ion-card-subtitle>Amount to be paid by customer</ion-card-subtitle>
+	  </ion-col>
+	  <ion-col *ngIf="(authService.getUserType() == 'S' || authService.getUserType() == 'D') && oldStatus == 'DE'">
+		 <ion-card-subtitle>Amount paid by customer</ion-card-subtitle>
+	  </ion-col>
+	  <ion-col style="text-align:right;">
+		 &#x20b9; {{totalAmount}}
+	  </ion-col>
+	</ion-row>
+    <ion-row *ngIf="(authService.getUserType() == 'C' && oldStatus == 'ORD')">
+	  <ion-col style="text-align:center;">
+		 <ion-button expand="block" color="success" (click)="cancelOrder()">Cancel Order</ion-button>
+	  </ion-col>
+	</ion-row>
+	<ion-row *ngIf="(authService.getUserType() == 'D' || authService.getUserType() == 'S') && oldStatus != 'DE'">
+	  <ion-col style="text-align:center;">
+		 <ion-button expand="block" color="success" (click)="updateOrder()">Update Order</ion-button>
+	  </ion-col>
+	</ion-row>
+  </ion-toolbar>
+</ion-footer>

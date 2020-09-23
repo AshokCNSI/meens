@@ -1,3 +1,67 @@
+<div *ngIf="showSplash" class="splash">
+	<div class='at-container'>
+	  <h1 class='at-item'>
+	  </h1>
+	</div>
+</div>
 <ion-app>
-  <ion-router-outlet></ion-router-outlet>
+  <ion-split-pane contentId="main-content">
+    <ion-menu contentId="main-content" type="overlay">
+      <ion-content>
+	  <div class="menu-header-bg" *ngIf="authService.getIsUserLoggedIn()"> 
+	  <ion-menu-toggle style="position: absolute;    top: 40px;    padding: 16px;">
+		   <ion-item (click)="openAboutMe()">
+			  <ion-avatar slot="start">
+				<img src="./assets/avatar/avatar.png">
+			  </ion-avatar>
+			  <ion-card-header *ngIf="authService.getIsUserLoggedIn()">
+				  <ion-card-title>{{authService.getUserName()}}</ion-card-title>
+				  <ion-card-subtitle>{{authService.getEmailID()}}</ion-card-subtitle>
+				</ion-card-header>
+			</ion-item>
+		</ion-menu-toggle>
+		</div> 
+        <ion-list id="inbox-list">
+		<ion-card style="" *ngIf="!authService.getIsUserLoggedIn()">
+		  <ion-card-header>
+				<ion-card-title>Account</ion-card-title>
+				<ion-card-subtitle>Login/Create account to manage your orders.</ion-card-subtitle>
+		  </ion-card-header>
+
+		  <ion-card-content>
+			<ion-button expand="block" [routerLink]="['/mobilelogin']" color="danger">Login</ion-button>
+		  </ion-card-content>
+        </ion-card>
+		
+		 <ion-menu-toggle auto-hide="false" *ngFor="let p of menuList; let i = index" class="menu-item">
+            <ion-item (click)="selectedIndex = i" *ngIf="authService.getUserType() == 'SA' && (p.type == 'SA')" routerDirection="root" [routerLink]="[p.path]" lines="none" detail="false" [class.selected]="selectedIndex == i">
+              <ion-icon slot="start" [ios]="p.icon + '-outline'" [md]="p.icon + '-sharp'"></ion-icon>
+              <ion-label>{{ p.title }}</ion-label>
+            </ion-item>
+			 <ion-item (click)="selectedIndex = i" *ngIf="authService.getUserType() == 'A' && (p.type == 'A')" routerDirection="root" [routerLink]="[p.path]" lines="none" detail="false" [class.selected]="selectedIndex == i">
+              <ion-icon slot="start" [ios]="p.icon + '-outline'" [md]="p.icon + '-sharp'"></ion-icon>
+              <ion-label>{{ p.title }}</ion-label>
+            </ion-item>
+			<ion-item (click)="selectedIndex = i" *ngIf="authService.getUserType() == 'S' && (p.type == 'S')" routerDirection="root" [routerLink]="[p.path]" lines="none" detail="false" [class.selected]="selectedIndex == i">
+              <ion-icon slot="start" [ios]="p.icon + '-outline'" [md]="p.icon + '-sharp'"></ion-icon>
+              <ion-label>{{ p.title }}</ion-label>
+            </ion-item>
+			<ion-item (click)="selectedIndex = i" *ngIf="authService.getUserType() == 'C' && (p.type == 'CU')" routerDirection="root" [routerLink]="[p.path]" lines="none" detail="false" [class.selected]="selectedIndex == i">
+              <ion-icon slot="start" [ios]="p.icon + '-outline'" [md]="p.icon + '-sharp'"></ion-icon>
+              <ion-label>{{ p.title }}</ion-label>
+            </ion-item>
+			<ion-item (click)="selectedIndex = i" *ngIf="authService.getUserType() == 'D' && (p.type == 'D')" routerDirection="root" [routerLink]="[p.path]" lines="none" detail="false" [class.selected]="selectedIndex == i">
+              <ion-icon slot="start" [ios]="p.icon + '-outline'" [md]="p.icon + '-sharp'"></ion-icon>
+              <ion-label>{{ p.title }}</ion-label>
+            </ion-item>
+			<ion-item (click)="selectedIndex = i" *ngIf="p.type == 'C'" routerDirection="root" [routerLink]="[p.path]" lines="none" detail="false" [class.selected]="selectedIndex == i">
+              <ion-icon slot="start" [ios]="p.icon + '-outline'" [md]="p.icon + '-sharp'"></ion-icon>
+              <ion-label>{{ p.title }}</ion-label>
+            </ion-item>
+          </ion-menu-toggle>
+        </ion-list>
+      </ion-content>
+    </ion-menu>
+    <ion-router-outlet id="main-content"></ion-router-outlet>
+  </ion-split-pane>
 </ion-app>

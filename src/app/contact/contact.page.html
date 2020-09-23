@@ -1,0 +1,20 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Contact US</ion-title>
+	<ion-buttons slot="end">
+	<ion-button (click)="dismissModal()">Close</ion-button>
+  </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+<ion-card *ngFor="let p of contactList">
+  <ion-card-header>
+    <ion-card-title>{{p.title}}</ion-card-title>
+  </ion-card-header>
+
+  <ion-card-content>
+    {{p.description}}
+  </ion-card-content>
+</ion-card>
+</ion-content>

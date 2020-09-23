@@ -1,0 +1,75 @@
+	
+<ion-header [translucent]="true" >
+  <ion-toolbar >
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title *ngIf="!locationService.getCurrentLocation()">
+		<ion-skeleton-text animated style="width: 50%"></ion-skeleton-text>
+	</ion-title>
+	<ion-title  (click)="openMapSelection()" *ngIf="locationService.getCurrentLocation()">
+		{{locationService.getCurrentLocation() == "" ? 'No address found' : locationService.getCurrentLocation()}}
+		<p class="subtitle">Click to change address</p>
+	</ion-title>
+	
+  </ion-toolbar>
+  	<ion-searchbar *ngIf="authService.getUserType() != 'D'" animated showCancelButton="always" debounce="500" (ionCancel)="onCancel($event)" cancelButtonText="Custom Cancel"
+		(ionInput)="filterProductList($event)" (ionFocus)="hideContent()"  [value]="searchVal" autofocus="true"></ion-searchbar>
+
+</ion-header>
+
+<ion-content>
+<ion-card-header>
+	<ion-card-title class="heading">Your available products</ion-card-title>
+</ion-card-header>
+	<ng-container *ngIf="productList.length == 0 && norecordstatus">
+		<ion-card-subtitle class="no-items">No Pickups Available</ion-card-subtitle>
+	</ng-container>
+	<ng-container *ngIf="productList.length > 0">
+	<ion-row>
+		<ion-col>
+			<ion-card *ngFor="let p of productList; let i = index;" (click)="routeProductDetail(p.index)">
+				<img alt="M" class="center" src="{{productList[i].imagepath}}" onerror="this.onerror=null;this.src='https://www.nicepng.com/png/detail/128-1282756_svg-free-download-marlin-clipart-deep-sea-fishing.png';">
+				<ion-card-header>
+				  <ion-card-subtitle>{{productList[i].title}}</ion-card-subtitle>
+				  <ion-card-title>&#x20b9; {{productList[i].price}}</ion-card-title>
+				  <ion-card-subtitle>{{productList[i].available == 'Y' ? 'Available' : 'Not Available'}}</ion-card-subtitle>
+				  <ion-card-subtitle>{{productList[i].discountprice > 0 && productList[i].discount == 'Y' ? 'Discount &#x20b9; '+ productList[i].discountprice : 'No Discount'}}</ion-card-subtitle>
+				</ion-card-header>
+				<ion-card-content style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;">
+				  {{productList[i].details}}
+				</ion-card-content>
+			</ion-card>
+		</ion-col>
+	</ion-row>
+	</ng-container>
+
+<div *ngIf="productList.length == 0 && !norecordstatus">
+	<ion-row *ngFor="let i of Arr(skeletoncount).fill(1)">
+		<ion-col>
+			<ion-card>
+				<ion-skeleton-text animated></ion-skeleton-text>
+				<ion-card-header>
+				  <ion-card-subtitle><ion-skeleton-text animated style="width: 50%"></ion-skeleton-text></ion-card-subtitle>
+				  <ion-card-title><ion-skeleton-text animated style="width: 50%"></ion-skeleton-text></ion-card-title>
+				  
+				</ion-card-header>
+				<italic style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;">
+				  <ion-skeleton-text animated style="width: 50%"></ion-skeleton-text>
+				</italic>
+				
+				<ion-card-header>
+				  <ion-card-subtitle><ion-skeleton-text animated style="width: 50%"></ion-skeleton-text></ion-card-subtitle>
+				  <ion-card-subtitle><ion-skeleton-text animated style="width: 50%"></ion-skeleton-text></ion-card-subtitle>
+				</ion-card-header>
+			</ion-card>
+		</ion-col>
+	</ion-row>
+</div>
+
+<ion-fab vertical="bottom" horizontal="end" slot="fixed">
+	<ion-fab-button color="danger" [routerLink]="['/addproduct']">
+	  <ion-icon name="add"></ion-icon>
+	</ion-fab-button>
+</ion-fab>
+</ion-content>
