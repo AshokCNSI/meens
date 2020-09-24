@@ -1,0 +1,23 @@
+.vertical-center{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.center {
+   display: block;
+   margin: auto;
+  }
+  
+ion-button {
+  --background: #eb445a;
+}
+ion-label {
+	text-align: center;
+}
+
+.validator-error {
+	color: red; 
+	padding-top: 0.2rem; 
+	padding-left: 20px;
+}

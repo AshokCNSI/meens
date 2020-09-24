@@ -70,7 +70,11 @@ const routes: Routes = [
   {
     path: 'mysellingproducts',
     loadChildren: () => import('./mysellingproducts/mysellingproducts.module').then( m => m.MysellingproductsPageModule)
-  }
+  },
+  {
+    path: 'network',
+    loadChildren: () => import('./network/network.module').then( m => m.NetworkPageModule)
+  },
 ];
 
 @NgModule({
