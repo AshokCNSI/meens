@@ -121,6 +121,7 @@ export class OrderdetailsPage implements OnInit {
 					
 					this.assignedto = snapshot.child('assignedto').val();
 					this.masalaquantity = snapshot.child('masalaquantity').val();
+					this.cartList = [];
 					snapshot.child('items').forEach(item => {
 						let a = item.toJSON();
 						if(a['options']) {

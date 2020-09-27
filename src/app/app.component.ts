@@ -120,20 +120,27 @@ export class AppComponent implements OnInit {
 		  this.navController.navigateRoot('/locationfinder');
 		} else {
 			this.authService.userDetails().subscribe(res => { 
-				if (res !== null) {
-					firebase.database().ref('/profile/'+res.uid).once('value').then((snapshot) => {
-						if(snapshot != null) {
-							if(!snapshot.toJSON()) {
-								this.navController.navigateRoot('/customerdetails');
-							}
-						}
-					})
-				} else {
-					this.navController.navigateRoot('/mobilelogin');
-				}
-			  }, err => {
-				  console.log('err', err);
-			 })
+			if (res !== null) {
+				this.authService.setUserName(res.email);
+				this.authService.setUserID(res.uid);
+				this.authService.setEmailID(res.email);
+				this.authService.setIsUserLoggedIn(true);
+				firebase.database().ref('/profile/'+res.uid).once('value').then((snapshot) => {
+					if(snapshot != null) {
+						this.authService.setUserType(snapshot.child('usertype').val());  
+						this.authService.setUserName(snapshot.child('firstname').val()+" "+snapshot.child('lastname').val());
+						this.locationService.setLatitude(snapshot.child('latitude').val());
+						this.locationService.setLongitude(snapshot.child('longitude').val());
+						this.locationService.setCurrentLocation(snapshot.child('lastlocation').val());
+					}
+				})
+			} else {
+				this.authService.setIsUserLoggedIn(false);
+				this.navController.navigateRoot('/login');
+			}
+		  }, err => {
+			  console.log('err', err);
+		 })
 		}
 	  }).catch(e => console.log(e));
 	  

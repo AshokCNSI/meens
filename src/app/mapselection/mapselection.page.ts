@@ -298,18 +298,24 @@ export class MapselectionPage implements OnInit {
 	  if(this.current_lat != undefined && this.current_lat != "" 
 		&& this.current_long != undefined && this.current_long != ""
 		&& this.current_location != undefined && this.current_location != "") {
-			if(this.pageMode == 'AA') {
-				this.modalController.dismiss({
-					latitude : this.current_lat,
-					longitude : this.current_long, 
-					cur_location : this.current_location
-				});
-			} else if(this.pageMode == 'H') {
-				this.locationService.setLatitude(this.current_lat);
+			firebase.database().ref('/profile/'+this.authService.getUserID()).update({
+			   "latitude" : this.current_lat,
+			   "longitude" : this.current_long,
+			   "lastlocation" : this.current_location,
+			   "modifieddate": Date(),
+			   "modifiedby":this.authService.getUserID()
+		  }).then(
+		   res => 
+		   {
+			   this.locationService.setLatitude(this.current_lat);
 				this.locationService.setLongitude(this.current_long);
 				this.locationService.setCurrentLocation(this.current_location);
 				this.modalController.dismiss();
-			}
+			   this.navController.navigateRoot('/home');
+		   }
+		 ).catch(error => {
+			this.presentAlert('Error',error);
+		  });
 		} else {
 			this.presentAlert('Error','No address found');
 		}

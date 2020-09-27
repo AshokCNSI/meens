@@ -68,47 +68,8 @@ export class HomePage implements OnInit {
   }
 
   ngOnInit() { 
-	this.authService.userDetails().subscribe(res => { 
-		if (res !== null) {
-			this.authService.setUserName(res.email);
-			this.authService.setUserID(res.uid);
-			this.authService.setEmailID(res.email);
-			this.authService.setIsUserLoggedIn(true);
-			firebase.database().ref('/profile/'+res.uid).once('value').then((snapshot) => {
-				if(snapshot != null) {
-					this.authService.setUserType(snapshot.child('usertype').val());  
-					this.authService.setUserName(snapshot.child('firstname').val()+" "+snapshot.child('lastname').val());
-					this.locationService.setCurrentLocationFn();
-					this.db.list('/productsforselling', ref => ref.orderByChild('createdby').equalTo(this.authService.getUserID())).snapshotChanges().subscribe((snapshot) => {
-					  this.productList = [];
-					  this.productTempList = [];
-					  snapshot.forEach(item => {
-						let a = item.payload.toJSON();
-						a['index'] = item.key;
-						firebase.database().ref('/properties/products/'+a['productcode']).once('value').then((snapshot) => {
-							a['title'] = snapshot.child('title').val();
-							a['imagepath'] = snapshot.child('imagepath').val();
-							a['details'] = snapshot.child('details').val();
-							this.productList.push(a);
-							this.productList.sort(function (a, b) {
-								return (new Date(b.modifieddate).getTime() - new Date(a.modifieddate).getTime());
-							  });
-						}).catch((error: any) => {
-							
-						});
-						this.productTempList = this.productList;
-						
-					  })
-				  })
-				}
-			})
-		} else {
-			this.authService.setIsUserLoggedIn(false);
-			this.navController.navigateRoot('/login');
-		}
-	  }, err => {
-		  console.log('err', err);
-	 })
+	
+	 this.loadData();
 	 
 	 setTimeout(() => {
 		if(this.productList.length == 0) {
@@ -163,4 +124,38 @@ export class HomePage implements OnInit {
 		});
 		return await modal.present();
   } 
+  
+  loadData() {
+	  setTimeout(() => {
+		if(this.authService.getUserID()) {
+			this.loadHome();
+		} else {
+			this.loadData();
+		}
+	  }, 2000);
+  }
+  
+  loadHome() {
+	  this.db.list('/productsforselling', ref => ref.orderByChild('createdby').equalTo(this.authService.getUserID())).snapshotChanges().subscribe((snapshot) => {
+	  this.productList = [];
+	  this.productTempList = [];
+	  snapshot.forEach(item => {
+		let a = item.payload.toJSON();
+		a['index'] = item.key;
+		firebase.database().ref('/properties/products/'+a['productcode']).once('value').then((snapshot) => {
+			a['title'] = snapshot.child('title').val();
+			a['imagepath'] = snapshot.child('imagepath').val();
+			a['details'] = snapshot.child('details').val();
+			this.productList.push(a);
+			this.productList.sort(function (a, b) {
+				return (new Date(b.modifieddate).getTime() - new Date(a.modifieddate).getTime());
+			  });
+		}).catch((error: any) => {
+			
+		});
+		this.productTempList = this.productList;
+		
+	  })
+	 })
+  }
 }

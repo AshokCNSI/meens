@@ -7,9 +7,8 @@
     <ion-title *ngIf="!locationService.getCurrentLocation()">
 		<ion-skeleton-text animated style="width: 50%"></ion-skeleton-text>
 	</ion-title>
-	<ion-title  (click)="openMapSelection()" *ngIf="locationService.getCurrentLocation()">
+	<ion-title *ngIf="locationService.getCurrentLocation()">
 		{{locationService.getCurrentLocation() == "" ? 'No address found' : locationService.getCurrentLocation()}}
-		<p class="subtitle">Click to change address</p>
 	</ion-title>
 	
   </ion-toolbar>
@@ -23,7 +22,7 @@
 	<ion-card-title class="heading">Your available products</ion-card-title>
 </ion-card-header>
 	<ng-container *ngIf="productList.length == 0 && norecordstatus">
-		<ion-card-subtitle class="no-items">No Pickups Available</ion-card-subtitle>
+		<ion-card-subtitle class="no-items">No Items Available.Please add.</ion-card-subtitle>
 	</ng-container>
 	<ng-container *ngIf="productList.length > 0">
 	<ion-row>

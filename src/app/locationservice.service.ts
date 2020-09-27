@@ -52,23 +52,6 @@ export class LocationserviceService {
 		useLocale: true,
 		maxResults: 5
 	};
-	if(this.getLatitude() == undefined || this.getLatitude() == "" 
-		|| this.getLongitude() == undefined || this.getLongitude() == ""
-		|| this.getCurrentLocation() == undefined || this.getCurrentLocation() == "") {
-		this.geolocation.getCurrentPosition().then((resp) => {
-			this.setLatitude((resp.coords.latitude).toString());
-			this.setLongitude((resp.coords.longitude).toString());
-			this.nativeGeocoder.reverseGeocode(resp.coords.latitude, resp.coords.longitude, options)
-			.then((result: NativeGeocoderResult[]) => {
-				this.setCurrentLocation(this.generateAddress(result[0]));
-			})
-			.catch((error: any) => {
-				//this.navController.navigateRoot('/locationfinder');
-			});
-		}).catch((error: any) => {
-			//this.navController.navigateRoot('/locationfinder');
-		});
-	}	
   }
   
   	generateAddress(addressObj) {
